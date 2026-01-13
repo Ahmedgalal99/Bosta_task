@@ -4,6 +4,7 @@ import type { Product, CartItem } from '../types';
 
 interface CartState {
   items: CartItem[];
+  justAdded: boolean;
   addItem: (product: Product) => void;
   removeItem: (productId: number) => void;
   updateQuantity: (productId: number, quantity: number) => void;
@@ -16,12 +17,14 @@ export const useCartStore = create<CartState>()(
   persist(
     (set, get) => ({
       items: [],
+      justAdded: false,
 
       addItem: (product: Product) => {
         set((state) => {
           const existingItem = state.items.find((item) => item.id === product.id);
           if (existingItem) {
             return {
+              justAdded: true,
               items: state.items.map((item) =>
                 item.id === product.id
                   ? { ...item, quantity: item.quantity + 1 }
@@ -30,9 +33,11 @@ export const useCartStore = create<CartState>()(
             };
           }
           return {
+            justAdded: true,
             items: [...state.items, { ...product, quantity: 1 }],
           };
         });
+        setTimeout(() => set({ justAdded: false }), 500);
       },
 
       removeItem: (productId: number) => {

@@ -2,7 +2,12 @@ import { useState, useEffect, useMemo } from "react";
 import { productService } from "../services/api";
 import type { Product, SortOption } from "../types";
 import { ProductCard, Pagination } from "../components";
-import { Loading, ErrorMessage, EmptyState, Select } from "../components/ui";
+import {
+  ErrorMessage,
+  EmptyState,
+  Select,
+  ProductCardSkeleton,
+} from "../components/ui";
 
 const PRODUCTS_PER_PAGE = 10;
 
@@ -90,7 +95,21 @@ export function ProductListingPage() {
   ];
 
   if (isLoading) {
-    return <Loading message="Loading products..." />;
+    return (
+      <div>
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Products</h1>
+          <p className="text-gray-600">
+            Discovering amazing products for you...
+          </p>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <ProductCardSkeleton key={i} />
+          ))}
+        </div>
+      </div>
+    );
   }
 
   if (error) {

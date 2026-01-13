@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Layout, ProtectedRoute } from "./components";
+import { Layout, ProtectedRoute, SplashScreen } from "./components";
 import {
   ProductListingPage,
   ProductDetailsPage,
@@ -9,6 +10,12 @@ import {
 } from "./pages";
 
 function App() {
+  const [showSplash, setShowSplash] = useState(true);
+
+  if (showSplash) {
+    return <SplashScreen onComplete={() => setShowSplash(false)} />;
+  }
+
   return (
     <BrowserRouter>
       <Routes>
